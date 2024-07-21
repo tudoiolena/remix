@@ -18,6 +18,7 @@ export type DummyUser = {
   email: string;
   favorite: boolean;
   address: DummyUserAddress;
+  posts: DummyPost[];
 };
 
 export type DummyUserPartial = Omit<Partial<DummyUser>, "id">;
