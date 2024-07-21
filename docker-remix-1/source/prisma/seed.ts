@@ -13,7 +13,6 @@ export async function fetchDummyData(): Promise<DummyUser[]> {
 export async function getUserPosts(id: string): Promise<DummyPost[]> {
   const response = await fetch(getUrl(`/users/${id}/posts`));
   const data = (await response.json()) as { posts: DummyPost[] };
-  // const { posts } = await res.json();
   return data.posts;
 }
 
@@ -23,7 +22,7 @@ async function main() {
   for (const user of users) {
     const userPosts = await getUserPosts(user.id.toString());
 
-    const createdUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -53,7 +52,6 @@ async function main() {
         },
       },
     });
-    console.log(`Created user with id: ${createdUser.id}`);
   }
 }
 
