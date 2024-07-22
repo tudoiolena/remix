@@ -1,8 +1,12 @@
-import { DummyPost } from "./interfaces"
-import { getUrl } from "./utils"
+import { prisma } from "../../../utils/prisma.server";
 
-export async function getUserPosts(id: string): Promise<DummyPost[]> {
-  const res = await fetch(getUrl(`/users/${id}/posts`))
-  const { posts } = await res.json()
-  return posts
+export async function getUserPosts(userId: number) {
+  return await prisma.post.findMany({
+    where: {
+      userId: userId,
+    },
+    include: {
+      reactions: true,
+    },
+  });
 }

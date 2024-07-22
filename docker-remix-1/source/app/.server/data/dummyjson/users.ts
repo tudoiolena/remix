@@ -1,52 +1,75 @@
-import { getUrl } from "./utils";
-import type { DummyUser, DummyUserPartial } from "./interfaces";
+import type { DummyUserPartial } from "./interfaces";
+import { prisma } from "../../../utils/prisma.server";
 
-export async function getUsers(): Promise<DummyUser[]> {
-  const response = await fetch(getUrl(`/users`));
-  const { users } = await response.json();
-  return users;
-}
-
-export async function searchUsers(query: string): Promise<DummyUser[]> {
-  const url = getUrl(`/users/search?q=${query}`);
-  url.searchParams.append("q", query);
-
-  const response = await fetch(url);
-  const { users } = await response.json();
-  return users;
-}
-
-export async function getUserById(id: string): Promise<DummyUser> {
-  const res = await fetch(getUrl(`/users/${id}`));
-  const user = await res.json();
-  return user;
-}
-
-export async function createEmptyUser(): Promise<DummyUser> {
-  const res = await fetch(getUrl(`/users/add`), {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({}),
+export async function searchUsers(query: string) {
+  const users = await prisma.user.findMany({
+    where: {
+      OR: [
+        {
+          firstName: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+        {
+          lastName: {
+            contains: query,
+            mode: "insensitive",
+          },
+        },
+      ],
+    },
   });
-  const createdUser = await res.json();
-  return createdUser;
+  return users;
+}
+
+export async function createEmptyUser() {
+  return await prisma.user.create({
+    data: {
+      firstName: "",
+      lastName: "",
+      age: 0,
+      image: "",
+      favorite: false,
+      email: "",
+      address: {
+        create: {
+          country: "",
+          city: "",
+          address: "",
+        },
+      },
+    },
+  });
+}
+
+export async function getUsers() {
+  return await prisma.user.findMany();
+}
+
+export async function getUserById(userId: number) {
+  return await prisma.user.findUnique({
+    where: { id: userId },
+    include: { address: true },
+  });
+}
+
+export async function deleteUser(userId: number) {
+  return await prisma.user.delete({
+    where: {
+      id: userId,
+    },
+  });
 }
 
 export async function updateUser(
-  id: string,
-  data: DummyUserPartial
-): Promise<DummyUser> {
-  const res = await fetch(getUrl(`/users/${id}`), {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...data }),
+  userId: number,
+  updates: Record<string, DummyUserPartial>
+) {
+  return await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: updates,
   });
-  const updatedUser = await res.json();
-  return updatedUser;
-}
-
-export async function deleteUser(id: string): Promise<DummyUser> {
-  const res = await fetch(getUrl(`/users/${id}`), { method: "DELETE" });
-  const deletedUser = await res.json();
-  return deletedUser;
 }
