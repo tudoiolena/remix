@@ -1,19 +1,58 @@
 import { PrismaClient } from "@prisma/client";
 import fetch from "node-fetch";
-import { DummyPost, DummyUser, getUrl } from "../app/.server/data/dummyjson";
+import {
+  DummyPost,
+  DummyUser,
+  getUrl,
+  LIMIT_NUMBER,
+} from "../app/.server/data/dummyjson";
 
 const db = new PrismaClient();
 export { db };
+
 export async function fetchDummyData(): Promise<DummyUser[]> {
-  const response = await fetch(getUrl(`/users`));
-  const data = (await response.json()) as { users: DummyUser[] };
-  return data.users;
+  let allUsers: DummyUser[] = [];
+  let chunk = 0;
+  let moreUsers = true;
+
+  while (moreUsers) {
+    const response = await fetch(
+      getUrl(`/users?limit=${LIMIT_NUMBER}&skip=${chunk * LIMIT_NUMBER}`)
+    );
+    const data = (await response.json()) as { users: DummyUser[] };
+
+    if (data.users.length === 0) {
+      moreUsers = false;
+    }
+
+    allUsers = allUsers.concat(data.users);
+    chunk++;
+  }
+
+  return allUsers;
 }
 
 export async function getUserPosts(id: string): Promise<DummyPost[]> {
-  const response = await fetch(getUrl(`/users/${id}/posts`));
-  const data = (await response.json()) as { posts: DummyPost[] };
-  return data.posts;
+  let allPosts: DummyPost[] = [];
+  let chunk = 0;
+  let morePosts = true;
+
+  while (morePosts) {
+    const response = await fetch(
+      getUrl(
+        `/users/${id}/posts?limit=${LIMIT_NUMBER}&skip=${chunk * LIMIT_NUMBER}`
+      )
+    );
+    const data = (await response.json()) as { posts: DummyPost[] };
+
+    if (data.posts.length === 0) {
+      morePosts = false;
+    }
+
+    allPosts = allPosts.concat(data.posts);
+    chunk++;
+  }
+  return allPosts;
 }
 
 async function main() {
