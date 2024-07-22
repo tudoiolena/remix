@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { prisma } from "../../utils/prisma.server";
 // import { searchUsers, getUsers } from "../data/dummyjson";
-import { db } from "../../../prisma/seed";
 
 // export const usersLoader = async ({ request }: LoaderFunctionArgs) => {
 //   const url = new URL(request.url);
@@ -15,6 +15,6 @@ export const usersLoader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q")?.trim() || "";
 
-  const users = await db.user.findMany();
+  const users = await prisma.user.findMany();
   return { users, q };
 };

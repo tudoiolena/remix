@@ -6,7 +6,7 @@ import {
   useNavigation,
   useSubmit,
 } from "@remix-run/react";
-import { React, useEffect } from "react";
+import { useEffect } from "react";
 import { usersLoader } from "../.server/loaders/users.loader";
 import { userCreateAction } from "../.server/actions/users.create.action";
 

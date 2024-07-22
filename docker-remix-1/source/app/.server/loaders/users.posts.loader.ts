@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { prisma } from "../../utils/prisma.server";
 // import { getUserPosts } from "../data/dummyjson";
-import { db } from "../../../prisma/seed";
 
 // export const usersPostsLoader = async ({ params }: LoaderFunctionArgs) => {
 //   if (!params.userId) {
@@ -18,7 +18,7 @@ export const usersPostsLoader = async ({ params }: LoaderFunctionArgs) => {
     throw new Response("Id Not Found", { status: 404 });
   }
 
-  const posts = await db.post.findMany({
+  const posts = await prisma.post.findMany({
     where: {
       userId: parseInt(params.userId),
     },

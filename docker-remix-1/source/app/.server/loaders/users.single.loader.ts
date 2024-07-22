@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
+import { prisma } from "../../utils/prisma.server";
 // import { getUserById } from "../data/dummyjson";
-import { db } from "../../../prisma/seed";
 
 // export const usersSingleLoader = async ({ params }: LoaderFunctionArgs) => {
 //   if (!params.userId) {
@@ -18,7 +18,7 @@ export const usersSingleLoader = async ({ params }: LoaderFunctionArgs) => {
     throw new Response("Id Not Found", { status: 404 });
   }
 
-  const user = await db.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: { id: parseInt(params.userId) },
     include: { address: true },
   });

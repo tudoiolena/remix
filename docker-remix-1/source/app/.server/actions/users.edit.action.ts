@@ -1,7 +1,7 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
-import { db } from "../../../prisma/seed";
 import { DummyUserPartial } from "../data/dummyjson";
+import { prisma } from "../../utils/prisma.server";
 // import { updateUser } from "../data/dummyjson";
 
 // export const userEditAction = async ({
@@ -30,7 +30,7 @@ export const userEditAction = async ({
     [key: string]: DummyUserPartial;
   };
 
-  await db.user.update({
+  await prisma.user.update({
     where: {
       id: parseInt(params.userId),
     },

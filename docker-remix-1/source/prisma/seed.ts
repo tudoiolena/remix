@@ -7,10 +7,9 @@ import {
   LIMIT_NUMBER,
 } from "../app/.server/data/dummyjson";
 
-const db = new PrismaClient();
-export { db };
+const prisma = new PrismaClient();
 
-export async function fetchDummyData(): Promise<DummyUser[]> {
+async function getUsers(): Promise<DummyUser[]> {
   let allUsers: DummyUser[] = [];
   let chunk = 0;
   let moreUsers = true;
@@ -32,7 +31,7 @@ export async function fetchDummyData(): Promise<DummyUser[]> {
   return allUsers;
 }
 
-export async function getUserPosts(id: string): Promise<DummyPost[]> {
+async function getUserPosts(id: string): Promise<DummyPost[]> {
   let allPosts: DummyPost[] = [];
   let chunk = 0;
   let morePosts = true;
@@ -56,12 +55,12 @@ export async function getUserPosts(id: string): Promise<DummyPost[]> {
 }
 
 async function main() {
-  const users = await fetchDummyData();
+  const users = await getUsers();
 
   for (const user of users) {
     const userPosts = await getUserPosts(user.id.toString());
 
-    await db.user.create({
+    await prisma.user.create({
       data: {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -100,5 +99,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await db.$disconnect();
+    await prisma.$disconnect();
   });

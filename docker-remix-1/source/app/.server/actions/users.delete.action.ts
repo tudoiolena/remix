@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
+import { prisma } from "../../utils/prisma.server";
 // import { deleteUser } from "../data/dummyjson";
-import { db } from "../../../prisma/seed";
 
 // export const userDeleteAction = async ({ params }: ActionFunctionArgs) => {
 //   if (!params.userId) {
@@ -15,7 +15,7 @@ export const userDeleteAction = async ({ params }: ActionFunctionArgs) => {
     throw new Response("Id Not Found", { status: 404 });
   }
 
-  await db.user.delete({
+  await prisma.user.delete({
     where: {
       id: parseInt(params.userId),
     },

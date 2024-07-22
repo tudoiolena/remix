@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/react";
+import { prisma } from "../../utils/prisma.server";
 // import { createEmptyUser } from "../data/dummyjson";
-import { db } from "../../../prisma/seed";
 
 // export const userCreateAction = async () => {
 //   const user = await createEmptyUser();
@@ -8,7 +8,7 @@ import { db } from "../../../prisma/seed";
 // };
 
 export const userCreateAction = async () => {
-  const user = await db.user.create({
+  const user = await prisma.user.create({
     data: {
       firstName: "",
       lastName: "",

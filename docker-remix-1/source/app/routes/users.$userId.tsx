@@ -1,5 +1,5 @@
-import React from "react";
-import { NavLink, Outlet, useLoaderData, useRouteLoaderData } from "@remix-run/react";
+// import React from "react";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 import { usersSingleLoader } from "../.server/loaders/users.single.loader";
 
 export const loader = usersSingleLoader;
