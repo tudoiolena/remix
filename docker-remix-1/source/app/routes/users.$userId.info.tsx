@@ -2,9 +2,10 @@ import React from "react";
 import { useNavigation, useRouteLoaderData } from "@remix-run/react";
 import { usersSingleLoader } from "../.server/loaders/users.single.loader";
 
-
 export default function UserInfo() {
-  const routeData = useRouteLoaderData<typeof usersSingleLoader>("routes/users.$userId");
+  const routeData = useRouteLoaderData<typeof usersSingleLoader>(
+    "routes/users.$userId"
+  );
   const { state } = useNavigation();
 
   if (!routeData) {

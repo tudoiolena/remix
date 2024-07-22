@@ -13,7 +13,7 @@ model User {
   lastName  String
   age       Int
   image     String
-  email     String   @unique
+  email     String   
   favorite  Boolean
   address   Address? 
   posts     Post[]

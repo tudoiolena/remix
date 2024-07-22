@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import fetch from "node-fetch";
 import { DummyPost, DummyUser, getUrl } from "../app/.server/data/dummyjson";
 
-const prisma = new PrismaClient();
-
+const db = new PrismaClient();
+export { db };
 export async function fetchDummyData(): Promise<DummyUser[]> {
   const response = await fetch(getUrl(`/users`));
   const data = (await response.json()) as { users: DummyUser[] };
@@ -22,7 +22,7 @@ async function main() {
   for (const user of users) {
     const userPosts = await getUserPosts(user.id.toString());
 
-    await prisma.user.create({
+    await db.user.create({
       data: {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -61,5 +61,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await db.$disconnect();
   });
