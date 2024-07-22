@@ -1,10 +1,9 @@
 import { ActionFunctionArgs, redirect } from "@remix-run/node";
-import { deleteUser } from "../data/dummyjson/users";
+import { deleteUser } from "../data/dummyjson";
+import invariant from "tiny-invariant";
 
 export const userDeleteAction = async ({ params }: ActionFunctionArgs) => {
-  if (!params.userId) {
-    throw new Response("Id Not Found", { status: 404 });
-  }
+  invariant(params.userId, "Missing userId param");
 
   await deleteUser(parseInt(params.userId));
 

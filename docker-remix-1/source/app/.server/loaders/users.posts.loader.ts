@@ -1,10 +1,9 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { getUserPosts } from "../data/dummyjson/posts";
+import { getUserPosts } from "../data/dummyjson";
+import invariant from "tiny-invariant";
 
 export const usersPostsLoader = async ({ params }: LoaderFunctionArgs) => {
-  if (!params.userId) {
-    throw new Response("Id Not Found", { status: 404 });
-  }
+  invariant(params.userId, "Missing contactId param");
 
   const posts = await getUserPosts(parseInt(params.userId));
 

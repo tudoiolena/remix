@@ -1,15 +1,13 @@
 import { ActionFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/react";
-import { DummyUserPartial } from "../data/dummyjson";
-import { updateUser } from "../data/dummyjson/users";
+import invariant from "tiny-invariant";
+import { DummyUserPartial, updateUser } from "../data/dummyjson";
 
 export const userEditAction = async ({
   params,
   request,
 }: ActionFunctionArgs) => {
-  if (!params.userId) {
-    throw new Response("Id Not Found", { status: 404 });
-  }
+  invariant(params.userId, "Missing userId param");
 
   const formData = await request.formData();
   const updates = Object.fromEntries(formData) as Record<
