@@ -1,4 +1,4 @@
-import type { DummyUserPartial } from "./interfaces";
+import type { UserPartial } from "./interfaces";
 import { prisma } from "../../../utils/prisma.server";
 
 export async function searchUsers(query: string) {
@@ -62,10 +62,7 @@ export async function deleteUser(userId: number) {
   });
 }
 
-export async function updateUser(
-  userId: number,
-  updates: Record<string, DummyUserPartial>
-) {
+export async function updateUser(userId: number, updates: UserPartial) {
   return await prisma.user.update({
     where: {
       id: userId,

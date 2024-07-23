@@ -1,5 +1,5 @@
 // import React from "react";
-import { Form, useLoaderData, useMatches } from "@remix-run/react";
+import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 
 import { usersSingleLoader } from "../.server/loaders/users.single.loader";
 import { userEditAction } from "../.server/actions/users.edit.action";
@@ -10,8 +10,7 @@ export const loader = usersSingleLoader;
 
 export default function EditUser() {
   const { user } = useLoaderData<typeof loader>();
-
-  console.log(useMatches());
+  const navigate = useNavigate();
 
   return (
     <Form key={user.id} method="post" className="p-4 flex flex-col gap-4">
@@ -47,8 +46,12 @@ export default function EditUser() {
       </label>
 
       <div className="space-x-4">
-        <button type="submit">Save</button>
-        <button type="button">Cancel</button>
+        <button type="submit" className="bg-sky-500 hover:bg-sky-700">
+          Save
+        </button>
+        <button type="button" onClick={() => navigate(-1)}>
+          Cancel
+        </button>
       </div>
     </Form>
   );

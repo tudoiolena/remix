@@ -1,15 +1,17 @@
-export type DummyUserAddress = {
+import { Prisma } from "@prisma/client";
+
+export type UserAddress = {
   country: string;
   city: string;
   address: string;
 };
 
-export type DummyUserReaction = {
+export type UserReaction = {
   likes: number;
   dislikes: number;
 };
 
-export type DummyUser = {
+export type User = {
   id: number;
   firstName: string;
   lastName: string;
@@ -17,17 +19,17 @@ export type DummyUser = {
   image: string;
   email: string;
   favorite: boolean;
-  address: DummyUserAddress;
-  posts: DummyPost[];
+  address: UserAddress;
+  posts: Post[];
 };
 
-export type DummyUserPartial = Omit<Partial<DummyUser>, "id">;
+export type UserPartial = Partial<Omit<Prisma.UserUpdateInput, "id">>;
 
-export type DummyPost = {
+export type Post = {
   id: number;
   title: string;
   body: string;
   userId: number;
   tags: string[];
-  reactions: DummyUserReaction;
+  reactions: UserReaction;
 };
